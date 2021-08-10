@@ -1,17 +1,17 @@
 import {TicketsStore} from "../features/Tickets/store/Tickets.store";
-import {LoadingPanel} from "../features/LoadingPanel/store/LoadingPanel.state";
+import { LoadingPanelStore} from "../features/LoadingPanel/store/LoadingPanel.state";
 
 export interface RootState {
     ticketsStore:TicketsStore;
-    loadingPanelStore: LoadingPanel;
+    loadingPanelStore: LoadingPanelStore;
 }
 
 class RootStore implements RootState{
     public ticketsStore:TicketsStore;
-    public loadingPanelStore: LoadingPanel;
+    public loadingPanelStore: LoadingPanelStore;
     constructor() {
         this.ticketsStore = new TicketsStore(this);     
-        this.loadingPanelStore = new LoadingPanel(this);
+        this.loadingPanelStore = new LoadingPanelStore(this);
     }
 }
 

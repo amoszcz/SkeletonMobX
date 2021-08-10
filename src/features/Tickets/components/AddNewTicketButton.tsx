@@ -8,19 +8,27 @@ interface AddNewTicketButtonProps {
 const AddNewTicketButtonComponent: FC<AddNewTicketButtonProps> = () => {
     const buttonAdd = useRef<HTMLButtonElement | null>(null);
     const store = useContext(Store);
-    const {startAddTicket, focusAddButtonRequired, showEdit, setFocusAddButtonRequired} = store.rootStore.ticketsStore;
+    const {
+        isAddButtonDisabled,
+        isFocusRequired,
+        onAddNewTicketClicked,
+        onResetFocusRequired
+    } = store.rootStore.ticketsStore.views.addNewTicketButton;
+
     useEffect(() => {
-        if (focusAddButtonRequired) {
-            setFocusAddButtonRequired(false);
+        if (isFocusRequired) {
+            onResetFocusRequired()
             buttonAdd.current?.focus();
         }
-    }, [focusAddButtonRequired])
+    }, [isFocusRequired])
+
     return <>
         <button autoFocus={true} ref={btn => {
             if (btn) buttonAdd.current = btn;
         }} onClick={() => {
-            startAddTicket();
-        }} disabled={showEdit}>Dodaj nowy ticket
+            onAddNewTicketClicked();
+        }} disabled={isAddButtonDisabled}>
+            Dodaj nowy ticket
         </button>
     </>;
 };

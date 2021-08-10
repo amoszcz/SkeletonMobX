@@ -1,65 +1,37 @@
 import {RootState} from "../../../app/rootState";
 import {makeObservable, observable} from "mobx";
-import {waitASecond} from "../../../mocks/Mocks";
+import {AddNewTicketButtonViewStore} from "../components/AddNewTicketButton.viewstore";
+import {Tickets} from "./Tickets.domainstore";
+import {EditTicketViewStore} from "../components/EditTicket.viewstore";
+import {TicketsListViewStore} from "../components/TicketsList.viewstore";
 
 export interface Ticket {
     name: string;
     content: string;
 }
 
-export const EmptyTicket = {content: '', name: ''} as Ticket;
 
 export interface TicketsState {
-    tickets: Ticket[];
-    showEdit:boolean;
-    focusAddButtonRequired:boolean;
-    editedTicket:Ticket;
-    startAddTicket:()=>void;
-    changeTicketName:(name:string)=>void;
-    changeTicketContent:(content:string)=>void;
-    saveTicket:()=>Promise<void>;
+    domain: Tickets;
 }
 
-export class TicketsStore implements TicketsState{
-    editedTicket: Ticket = EmptyTicket;
-    focusAddButtonRequired: boolean = false;
-    showEdit: boolean = false;
-    tickets: Ticket[] = [];
-    
-    constructor(private rootStore:RootState) {
-        makeObservable(this,{
-            editedTicket:observable,
-            focusAddButtonRequired:observable,
-            showEdit:observable,
-            tickets:observable
-        });
-    }
-    
-    startAddTicket = () => {
-        this.editedTicket = EmptyTicket;
-        this.showEdit = true;        
+export class TicketsStore implements TicketsState {
+    domain: Tickets;
+    views: {
+        addNewTicketButton: AddNewTicketButtonViewStore,
+        editTicket: EditTicketViewStore,
+        ticketList: TicketsListViewStore
     }
 
-    changeTicketName = (name:string)=>{
-        this.editedTicket.name = name;
+    constructor(private rootStore: RootState) {
+        this.domain = new Tickets(this.rootStore);
+        this.views = {
+            addNewTicketButton: new AddNewTicketButtonViewStore(this.domain),
+            editTicket: new EditTicketViewStore(this.domain),
+            ticketList: new TicketsListViewStore(this.domain)
+        }
+        makeObservable(this, {
+            domain: observable,
+        });
     }
-    changeTicketContent = (content:string)=>{
-        this.editedTicket.content = content;
-    }
-    
-    setFocusAddButtonRequired = (required:boolean)=>{
-        this.focusAddButtonRequired = required;
-    }
-    
-    saveTicket =  async () => {
-        const ticket = this.editedTicket;
-        const simulateSaveToBackend = waitASecond as (ticketToSave:Ticket)=>Promise<void>;
-        this.rootStore.loadingPanelStore.show();
-        await simulateSaveToBackend(ticket);
-        this.rootStore.loadingPanelStore.hide()
-        this.tickets.push(ticket);
-        this.showEdit = false;
-        this.focusAddButtonRequired = true;
-    }
-    
 }

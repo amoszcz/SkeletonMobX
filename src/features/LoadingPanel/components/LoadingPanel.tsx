@@ -7,9 +7,9 @@ interface LoadingPanelProps {
 
 const LoadingPanelComponent: FC<LoadingPanelProps> = () => {
     const store = useContext(Store);
-    const visible = store.rootStore.loadingPanelStore.visible;
+    const {isLoadingPanelVisible} = store.rootStore.loadingPanelStore.views.loadingPanel;
     return <>
-        {visible && <>Loading...</>}
+        {isLoadingPanelVisible && <>Loading...</>}
     </>;
 };
 export const LoadingPanel = observer(LoadingPanelComponent);

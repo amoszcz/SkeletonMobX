@@ -9,7 +9,7 @@ interface TicketsListProps {
 
 const TicketsListComponent: FC<TicketsListProps> = () => {
     const store = useContext(Store)
-    const tickets = store.rootStore.ticketsStore.tickets;
+    const {tickets} = store.rootStore.ticketsStore.views.ticketList;
     return <>
         Lista Ticketów:
         <div style={{width:'100%'}}>

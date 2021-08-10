@@ -1,19 +1,22 @@
 import {RootState} from "../../../app/rootState";
-import {computed, makeObservable, observable} from "mobx";
+import { makeObservable, observable} from "mobx";
+import {LoadingPanel} from "./LoadingPanel.domainstore";
+import {LoadingPanelViewStore} from "../components/LoadingPanel.viewstore";
 
-export class LoadingPanel {
-     visible: boolean = false;
+export class LoadingPanelStore {
+    domain:LoadingPanel;
+    views:{
+        loadingPanel:LoadingPanelViewStore
+    }
 
 
     constructor(private rootStore: RootState) {
-        makeObservable(this, {visible: observable})
+        this.domain = new LoadingPanel(this.rootStore);
+        this.views = {
+            loadingPanel:new LoadingPanelViewStore(this.domain)
+        }
+        makeObservable(this, {domain:observable})
     }
 
-    show = () => {
-        this.visible = true;
-    }
-
-    hide = () => {
-        this.visible = false
-    }
+   
 }

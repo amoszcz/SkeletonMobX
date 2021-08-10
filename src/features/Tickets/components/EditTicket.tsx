@@ -7,19 +7,19 @@ interface EditTicketProps {
 
 const EditTicketComponent: FC<EditTicketProps> = ({}) => {
     const store = useContext(Store);
-    const {showEdit, editedTicket, changeTicketName,changeTicketContent,saveTicket} =store.rootStore.ticketsStore;    
+    const {isEditVisible,onSaveTicketClicked,onTicketContentInputChange,onTicketNameInputChange,ticketContent,ticketName} =store.rootStore.ticketsStore.views.editTicket;    
     return <>
-        {showEdit && <>
-            Nazwa: <input autoFocus={true} value={editedTicket.name} onChange={e => {
-            changeTicketName(e.target.value)
+        {isEditVisible && <>
+            Nazwa: <input autoFocus={true} value={ticketName} onChange={e => {
+            onTicketNameInputChange(e.target.value)
         }
         }/>
-            Opis: <textarea value={editedTicket.content} onChange={e => {
-            changeTicketContent(e.target.value) 
+            Opis: <textarea value={ticketContent} onChange={e => {
+            onTicketContentInputChange(e.target.value) 
         }
         }/>
             <button onClick={async () => {
-                await saveTicket();
+                await onSaveTicketClicked();
             }}>Zapisz
             </button>
         </>}
