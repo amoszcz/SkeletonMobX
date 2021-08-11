@@ -1,18 +1,18 @@
-import {TicketsStore} from "../features/Tickets/store/Tickets.store";
-import { LoadingPanelStore} from "../features/LoadingPanel/store/LoadingPanel.state";
+import { TicketsStore } from '../features/Tickets/store/Tickets.store';
+import { LoadingPanelStore } from '../features/LoadingPanel/store/LoadingPanel.state';
 
 export interface RootState {
-    ticketsStore:TicketsStore;
+    ticketsStore: TicketsStore;
     loadingPanelStore: LoadingPanelStore;
 }
 
-class RootStore implements RootState{
-    public ticketsStore:TicketsStore;
+class RootStore implements RootState {
+    public ticketsStore: TicketsStore;
     public loadingPanelStore: LoadingPanelStore;
     constructor() {
-        this.ticketsStore = new TicketsStore(this);     
+        this.ticketsStore = new TicketsStore(this);
         this.loadingPanelStore = new LoadingPanelStore(this);
     }
 }
 
-export const rootStore:RootState = new RootStore();
+export const rootStore: RootState = new RootStore();

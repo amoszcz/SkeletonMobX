@@ -1,5 +1,5 @@
-import {Tickets} from "../store/Tickets.domainstore";
-import {computed, makeObservable} from "mobx";
+import { Tickets } from '../store/Tickets.domainstore';
+import { computed, makeObservable } from 'mobx';
 
 export class EditTicketViewStore {
     get isEditVisible() {
@@ -14,23 +14,22 @@ export class EditTicketViewStore {
     }
 
     constructor(private domain: Tickets) {
-        makeObservable(this,{
-            isEditVisible:computed,
-            ticketName:computed,
-            ticketContent:computed
-        })
+        makeObservable(this, {
+            isEditVisible: computed,
+            ticketName: computed,
+            ticketContent: computed,
+        });
     }
 
-    onTicketNameInputChange = (value:string)=> {
+    onTicketNameInputChange = (value: string) => {
         return this.domain.changeTicketName(value);
-    }
+    };
 
-    onTicketContentInputChange = (value:string)=> {
+    onTicketContentInputChange = (value: string) => {
         return this.domain.changeTicketContent(value);
-    }
-    
+    };
+
     onSaveTicketClicked = async () => {
         await this.domain.saveTicket();
-    }
-    
+    };
 }
