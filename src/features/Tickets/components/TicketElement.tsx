@@ -1,11 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { Ticket } from '../store/Tickets.store';
+import { Store } from '../../../index';
+import { observer } from 'mobx-react';
 
 interface TicketElementProps {
     ticket: Ticket;
 }
 
 const TicketElementComponent: FC<TicketElementProps> = ({ ticket }) => {
+    const store = useContext(Store);
+    const ticketElement = store.rootStore.ticketsStore.views.ticketElement;
     return (
         <>
             <div
@@ -25,8 +29,15 @@ const TicketElementComponent: FC<TicketElementProps> = ({ ticket }) => {
                     <label></label>
                     <span>{ticket.content}</span>
                 </span>
+                <button
+                    onClick={async () => {
+                        await ticketElement.onDeleteClicked(ticket.guid);
+                    }}
+                >
+                    Usuń
+                </button>
             </div>
         </>
     );
 };
-export const TicketElement = TicketElementComponent;
+export const TicketElement = observer(TicketElementComponent);

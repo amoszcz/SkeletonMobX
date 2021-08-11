@@ -4,10 +4,13 @@ import { AddNewTicketButtonViewStore } from '../components/AddNewTicketButton.vi
 import { Tickets } from './Tickets.domainstore';
 import { EditTicketViewStore } from '../components/EditTicket.viewstore';
 import { TicketsListViewStore } from '../components/TicketsList.viewstore';
+import { Guid } from '../../../app/guid';
+import { TicketElementViewStore } from '../components/TicketElement.viewstore';
 
 export interface Ticket {
     name: string;
     content: string;
+    guid: Guid;
 }
 
 export interface TicketsState {
@@ -20,6 +23,7 @@ export class TicketsStore implements TicketsState {
         addNewTicketButton: AddNewTicketButtonViewStore;
         editTicket: EditTicketViewStore;
         ticketList: TicketsListViewStore;
+        ticketElement: TicketElementViewStore;
     };
 
     constructor(private rootStore: RootState) {
@@ -28,6 +32,7 @@ export class TicketsStore implements TicketsState {
             addNewTicketButton: new AddNewTicketButtonViewStore(this.domain),
             editTicket: new EditTicketViewStore(this.domain),
             ticketList: new TicketsListViewStore(this.domain),
+            ticketElement: new TicketElementViewStore(this.domain),
         };
         makeObservable(this, {
             domain: observable,
