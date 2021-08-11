@@ -1,38 +1,50 @@
 import { RootState } from '../../../app/rootState';
 import { waitASecond } from '../../../mocks/Mocks';
 import { Ticket } from './Tickets.store';
-import { makeObservable, observable } from 'mobx';
+import { computed, makeObservable, observable } from 'mobx';
 import { Guid } from '../../../app/guid';
 
 export const EmptyTicket = () => ({ content: '', name: '', guid: Guid.NewGuid() } as Ticket);
 export class Tickets {
-    editedTicket: Ticket = EmptyTicket();
-    focusAddButtonRequired: boolean = false;
-    showEdit: boolean = false;
-    tickets: Ticket[] = [];
+    _editedTicket: Ticket = EmptyTicket();
+    get editedTicket() {
+        return this._editedTicket;
+    }
+    _focusAddButtonRequired: boolean = false;
+    get focusAddButtonRequired() {
+        return this._focusAddButtonRequired;
+    }
+    _showEdit: boolean = false;
+    get showEdit() {
+        return this._showEdit;
+    }
+    _tickets: Ticket[] = [];
+    get tickets() {
+        return this._tickets;
+    }
 
     constructor(private rootStore: RootState) {
         makeObservable(this, {
-            editedTicket: observable,
-            tickets: observable,
-            showEdit: observable,
-            focusAddButtonRequired: observable,
+            _editedTicket: observable,
+            _tickets: observable,
+            _showEdit: observable,
+            _focusAddButtonRequired: observable,
         });
     }
     startAddTicket = () => {
-        this.editedTicket = EmptyTicket();
-        this.showEdit = true;
+        this._editedTicket = EmptyTicket();
+        this._showEdit = true;
     };
 
     changeTicketName = (name: string) => {
-        this.editedTicket.name = name;
+        this._editedTicket.name = name;
     };
     changeTicketContent = (content: string) => {
-        this.editedTicket.content = content;
+        this._editedTicket.content = content;
     };
 
     setFocusAddButtonRequired = (required: boolean) => {
-        this.focusAddButtonRequired = required;
+        this._focusAddButtonRequired = required;
     };
 
     saveTicket = async () => {
@@ -41,9 +53,9 @@ export class Tickets {
         this.rootStore.loadingPanelStore.domain.show();
         await simulateSaveToBackend(ticket);
         this.rootStore.loadingPanelStore.domain.hide();
-        this.tickets.push(ticket);
-        this.showEdit = false;
-        this.focusAddButtonRequired = true;
+        this._tickets.push(ticket);
+        this._showEdit = false;
+        this._focusAddButtonRequired = true;
     };
 
     removeTicket = async (ticketGuid: Guid) => {
